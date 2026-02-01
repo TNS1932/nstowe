@@ -105,7 +105,7 @@
       const resEl = document.getElementById('marketResults');
       resEl.textContent = 'Loading...';
       try{
-        const r = await fetch('/api/market/' + encodeURIComponent(s));
+        const r = await fetch('/market/' + encodeURIComponent(s));
         if(!r.ok) throw r;
         const data = await r.json();
         if(Array.isArray(data) && data.length>0){
@@ -129,7 +129,7 @@
       const fd = new FormData();
       fd.append('file', fileInput.files[0]);
       try{
-        const r = await fetch('/api/validate',{method:'POST', body: fd});
+        const r = await fetch('/validate',{method:'POST', body: fd});
         const json = await r.json();
         if(r.ok){
           resEl.innerHTML = `<div><strong>Original rows:</strong> ${json.original_rows}</div><div><strong>Sanitized rows:</strong> ${json.sanitized_rows}</div>`;
