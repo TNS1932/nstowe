@@ -1,0 +1,39 @@
+import yfinance as yf
+import pandas as pd
+from fastapi import FastAPI
+
+app = FastAPI()
+
+portfolio = pd.read_csv("portfolio.csv")
+
+# ---------- MARKET ENGINE ----------
+@app.get("/market/{symbol}")
+def market_data(symbol: str):
+    stock = yf.Ticker(symbol)
+    hist = stock.history(period="5y")
+    return hist.reset_index().to_dict(orient="records")
+
+# ---------- PORTFOLIO ENGINE ----------
+@app.get("/portfolio/{symbol}")
+def portfolio_data(symbol: str):
+    trades = portfolio[portfolio["symbol"] == symbol]
+
+    total_shares = trades["shares"].sum()
+    avg_cost = (trades["shares"] * trades["price"]).sum() / total_shares
+
+    stock = yf.Ticker(symbol)
+    price = stock.history(period="1d")["Close"].iloc[-1]
+
+    equity = total_shares * price
+    pnl = (price - avg_cost) * total_shares
+    roi = (price - avg_cost) / avg_cost * 100
+
+    return {
+        "symbol": symbol,
+        "total_shares": total_shares,
+        "avg_cost": round(avg_cost, 2),
+        "current_price": round(price, 2),
+        "equity": round(equity, 2),
+        "pnl": round(pnl, 2),
+        "roi_percent": round(roi, 2)
+    }

@@ -1,0 +1,2 @@
+Static assets for the site.
+Place images, CSS, or JS files here if needed. This folder exists so tests and the app can mount static files.

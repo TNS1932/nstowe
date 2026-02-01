@@ -1,0 +1,6 @@
+symbol,shares,price
+AAPL,10,150.00
+JNJ,5,140.00
+BTC-USD,0.1,30000.00
+MISSING_SHARES,,100.00
+BAD_PRICE,2,not_a_number
